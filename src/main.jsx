@@ -5,9 +5,11 @@ import {
  
   RouterProvider,
 } from "react-router-dom";
-import Root, {loader as rootLoader} from "./routes/root";
+import Root, {loader as rootLoader,
+action as rootAction} from "./routes/root";
 import ErrorPage from "./error-page";
-import Contact from "./routes/contact";
+import Contact, {loader as contactLoader} from "./routes/contact";
+import EditContact, {action as editAction} from "./routes/edit";
 
 import "./index.css";
 
@@ -15,18 +17,27 @@ import "./index.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root/>,
+    element: <Root />,
+    errorElement: <ErrorPage />,
     loader: rootLoader,
-    errorElement: <ErrorPage/>,
+    action: rootAction,
     children: [
       {
-        path:"contacts/:contactId",
-        element:<Contact/>,
-      }
-    ]
-  },
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader,
+      },
+      {
+        path: "contacts/:contactId/edit",
+        element: <EditContact />,
+        loader: contactLoader,
+        action: editAction,
+      },
 
-])
+    ],
+  },
+]);
+ 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
